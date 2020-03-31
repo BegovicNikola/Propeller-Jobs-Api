@@ -1,7 +1,7 @@
 // @desc    Get All Companies
 // @route   GET /api/v1/company
 // @access  Public
-exports.getCompanies = (req, res, next) => {
+const getCompanies = (req, res, next) => {
   res.send({
     success: true,
     data: 'Get all companies'
@@ -11,7 +11,7 @@ exports.getCompanies = (req, res, next) => {
 // @desc    Get Single Comapny
 // @route   GET /api/v1/company/:id
 // @access  Public
-exports.getCompany = (req, res, next) => {
+const getCompany = (req, res, next) => {
   res.send({
     success: true,
     data: `Get a company with the id: ${req.params.id}`
@@ -21,7 +21,7 @@ exports.getCompany = (req, res, next) => {
 // @desc    Create Company
 // @route   POST /api/v1/company
 // @access  Private
-exports.createCompany = (req, res, next) => {
+const createCompany = (req, res, next) => {
   res.send({
     success: true,
     data: 'Create a company'
@@ -31,7 +31,7 @@ exports.createCompany = (req, res, next) => {
 // @desc    Update Company
 // @route   PUT /api/v1/company/:id
 // @access  Private
-exports.updateCompany = (req, res, next) => {
+const updateCompany = (req, res, next) => {
   res.send({
     success: true,
     data: `Update a company with the id: ${req.params.id}`
@@ -41,9 +41,17 @@ exports.updateCompany = (req, res, next) => {
 // @desc    Delete Company
 // @route   DELETE /api/v1/company/:id
 // @access  Private
-exports.deleteCompany = (req, res, next) => {
+const deleteCompany = (req, res, next) => {
   res.send({
     success: true,
     data: `Delete a company with the id: ${req.params.id}`
   });
+};
+
+module.exports = {
+  getCompanies,
+  getCompany,
+  createCompany,
+  updateCompany,
+  deleteCompany
 };
