@@ -3,9 +3,13 @@ const dotenv = require('dotenv');
 
 const company = require('./routes/company');
 
+const logger = require('./middleware/logger');
+
 dotenv.config({ path: './config/config.env' });
 
 const app = express();
+
+app.use(logger);
 
 app.use('/api/v1/company', company);
 
