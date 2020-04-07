@@ -24,7 +24,7 @@ const CompanySchema = {
   phone: {
     type: String,
     match: [
-      /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/,
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
       'Please use a valid phone number',
     ],
   },
@@ -35,20 +35,20 @@ const CompanySchema = {
       'Please use a valid email address',
     ],
   },
-  location: {
-    type: { type: String, enum: ['Point'], required: true },
-    coordinates: {
-      type: [Number],
-      required: true,
-      index: '2dsphere',
-    },
-    formattedAddress: String,
-    street: String,
-    city: String,
-    state: String,
-    zip: String,
-    country: String,
-  },
+  // location: {
+  //   type: { type: String, enum: ['Point'], required: true },
+  //   coordinates: {
+  //     type: [Number],
+  //     required: true,
+  //     index: '2dsphere',
+  //   },
+  //   formattedAddress: String,
+  //   street: String,
+  //   city: String,
+  //   state: String,
+  //   zip: String,
+  //   country: String,
+  // },
   stack: {
     type: [String],
     required: true,
