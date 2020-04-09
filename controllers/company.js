@@ -1,4 +1,5 @@
 const Company = require('../models/Company');
+const ErrorResponse = require('../middleware/utils/errorResponse');
 
 // @desc    Get All Companies
 // @route   GET /api/v1/company
@@ -13,9 +14,7 @@ const getCompanies = async (req, res, next) => {
       data: companies,
     });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
+    next(err);
   }
 };
 
@@ -27,9 +26,10 @@ const getCompany = async (req, res, next) => {
     const company = await Company.findById(req.params.id);
 
     if (!company) {
-      return res.status(400).json({
-        success: false,
-      });
+      throw new ErrorResponse(
+        `Company with the id: ${req.params.id} is not found`,
+        404
+      );
     }
 
     res.status(201).json({
@@ -37,9 +37,7 @@ const getCompany = async (req, res, next) => {
       data: company,
     });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
+    next(err);
   }
 };
 
@@ -55,9 +53,7 @@ const createCompany = async (req, res, next) => {
       data: company,
     });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
+    next(err);
   }
 };
 
@@ -72,9 +68,10 @@ const updateCompany = async (req, res, next) => {
     });
 
     if (!company) {
-      return res.status(400).json({
-        success: false,
-      });
+      throw new ErrorResponse(
+        `Company with the id: ${req.params.id} is not found`,
+        404
+      );
     }
 
     res.status(200).json({
@@ -82,9 +79,7 @@ const updateCompany = async (req, res, next) => {
       data: company,
     });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
+    next(err);
   }
 };
 
@@ -96,9 +91,10 @@ const deleteCompany = async (req, res, next) => {
     const company = await Company.findByIdAndDelete(req.params.id);
 
     if (!company) {
-      return res.status(400).json({
-        success: false,
-      });
+      throw new ErrorResponse(
+        `Company with the id: ${req.params.id} is not found`,
+        404
+      );
     }
     console.log(company);
     res.status(200).json({
@@ -106,9 +102,7 @@ const deleteCompany = async (req, res, next) => {
       data: company,
     });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
+    next(err);
   }
 };
 

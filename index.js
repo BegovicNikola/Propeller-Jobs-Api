@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const errorHandler = require('./middleware/error');
 // const morgan = require('morgan');
 const connectDB = require('./config/db');
 
@@ -22,7 +23,9 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/v1/company', company);
 
-const PORT = process.env.PORT || 4000;
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
   console.log(
