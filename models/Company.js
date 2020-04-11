@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const geocoder = require('../middleware/utils/geocoder');
 
 const CompanySchema = new mongoose.Schema({
   name: {
@@ -15,6 +16,7 @@ const CompanySchema = new mongoose.Schema({
     required: [true, 'Please add a description'],
     maxlength: [700, 'Description can not be longer than 700 characters'],
   },
+  address: String,
   website: {
     type: String,
     match: [
@@ -36,20 +38,19 @@ const CompanySchema = new mongoose.Schema({
       'Please use a valid email address',
     ],
   },
-  // location: {
-  //   type: { type: String, enum: ['Point'], required: true },
-  //   coordinates: {
-  //     type: [Number],
-  //     required: true,
-  //     index: '2dsphere',
-  //   },
-  //   formattedAddress: String,
-  //   street: String,
-  //   city: String,
-  //   state: String,
-  //   zip: String,
-  //   country: String,
-  // },
+  location: {
+    type: { type: String, enum: ['Point'] },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere',
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    state: String,
+    zip: String,
+    country: String,
+  },
   stack: {
     type: [String],
     required: true,
@@ -90,6 +91,23 @@ const CompanySchema = new mongoose.Schema({
 
 CompanySchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+CompanySchema.pre('save', async function (next) {
+  const loc = await geocoder.geocode(this.address);
+  console.log(loc);
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zip: loc[0].zipcode,
+    country: loc[0].countryCode,
+  };
+  this.address = undefined;
   next();
 });
 

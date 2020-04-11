@@ -1,14 +1,12 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const errorHandler = require('./middleware/error');
+require('dotenv').config();
 // const morgan = require('morgan');
+const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
 const company = require('./routes/company');
 
 const logger = require('./middleware/logger');
-
-dotenv.config({ path: './config/config.env' });
 
 connectDB();
 
