@@ -10,13 +10,15 @@ const CompanySchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, 'Name can not be more than 50 characters'],
   },
-  slug: String,
   description: {
     type: String,
     required: [true, 'Please add a description'],
     maxlength: [700, 'Description can not be longer than 700 characters'],
   },
-  address: String,
+  slug: String,
+  // Adding the city was necessary since mapquest doesn't provide it always
+  city: { type: String, required: [true, 'Please add a city'] },
+  address: { type: String, required: [true, 'Please add an address'] },
   website: {
     type: String,
     match: [
@@ -37,19 +39,6 @@ const CompanySchema = new mongoose.Schema({
       /^([0-9a-zA-Z]([-\.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/,
       'Please use a valid email address',
     ],
-  },
-  location: {
-    type: { type: String, enum: ['Point'] },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere',
-    },
-    formattedAddress: String,
-    street: String,
-    city: String,
-    state: String,
-    zip: String,
-    country: String,
   },
   stack: {
     type: [String],
@@ -83,6 +72,19 @@ const CompanySchema = new mongoose.Schema({
     required: true,
     enum: ['Contract', 'Part-time', 'Full-time'],
   },
+  location: {
+    type: { type: String, enum: ['Point'] },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere',
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    state: String,
+    zip: String,
+    country: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -90,13 +92,13 @@ const CompanySchema = new mongoose.Schema({
 });
 
 CompanySchema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true });
+  const slugParam = `${this.name} ${this.city}`;
+  this.slug = slugify(slugParam, { lower: true });
   next();
 });
 
 CompanySchema.pre('save', async function (next) {
   const loc = await geocoder.geocode(this.address);
-  console.log(loc);
   this.location = {
     type: 'Point',
     coordinates: [loc[0].longitude, loc[0].latitude],

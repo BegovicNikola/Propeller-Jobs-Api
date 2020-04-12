@@ -80,7 +80,7 @@ const deleteCompany = asyncHandler(async (req, res, next) => {
       404
     );
   }
-  console.log(company);
+
   res.status(200).json({
     success: true,
     data: company,
