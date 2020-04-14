@@ -11,7 +11,7 @@ const getCompanies = asyncHandler(async (req, res, next) => {
   let query;
   const reqQuery = { ...req.query };
 
-  const removeFields = ['select', 'sort'];
+  const removeFields = ['select', 'sort', 'page', 'limit'];
   removeFields.forEach((param) => delete reqQuery[param]);
 
   let queryString = JSON.stringify(reqQuery);
@@ -35,11 +35,30 @@ const getCompanies = asyncHandler(async (req, res, next) => {
     query = query.sort('name');
   }
 
+  let pagination = {};
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
+  const startIndex = (page - 1) * limit;
+  const totalItems = await Company.countDocuments(JSON.parse(queryString));
+
+  pagination = {
+    page,
+    limit,
+    totalItems,
+    startIndex,
+  };
+
+  query = query.skip(startIndex).limit(limit);
+
   const companies = await query;
 
   res.status(201).json({
     success: true,
     count: companies.length,
+    pagination: {
+      ...pagination,
+      endIndex: startIndex + companies.length - 1,
+    },
     data: companies,
   });
 });
