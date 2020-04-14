@@ -4,20 +4,16 @@ const {
   getCompany,
   createCompany,
   updateCompany,
-  deleteCompany
+  deleteCompany,
+  getCompaniesByRadius,
 } = require('../controllers/company');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .get(getCompanies)
-  .post(createCompany);
+router.route('/radius/:city/:distance').get(getCompaniesByRadius);
 
-router
-  .route('/:id')
-  .get(getCompany)
-  .put(updateCompany)
-  .delete(deleteCompany);
+router.route('/').get(getCompanies).post(createCompany);
+
+router.route('/:id').get(getCompany).put(updateCompany).delete(deleteCompany);
 
 module.exports = router;
