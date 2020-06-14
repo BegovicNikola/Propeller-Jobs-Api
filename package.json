@@ -6,6 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node index",
     "dev": "nodemon index",
+    "debug": "node inspect index",
     "import-company-seeder": "node seeder -im",
     "remove-company-seeder": "node seeder -rm"
   },
