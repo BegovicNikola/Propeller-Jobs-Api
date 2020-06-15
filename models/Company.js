@@ -40,20 +40,6 @@ const CompanySchema = new mongoose.Schema({
       'Please use a valid email address',
     ],
   },
-  stack: {
-    type: [String],
-    required: true,
-    enum: [
-      'HTML',
-      'CSS',
-      'Javascript',
-      'Java',
-      'Python',
-      'C#',
-      'Android',
-      'iOS',
-    ],
-  },
   rating: {
     type: Number,
     min: [1, 'Rating must be at least 1'],
